@@ -1,0 +1,43 @@
+<resources>
+    <string name="app_name">Aplikacja Egzaminatora</string>
+    <string name="rate_of_positive_results_label">Zdawalność: </string>
+    <string name="number_of_positive_results_label">Pozytywne: </string>
+    <string name="number_of_did_not_take_an_exam_results_label">Nieprzystąpienia</string>
+    <string name="number_of_negative_maneuvring_area_results_label">Negatywne (Plac)</string>
+    <string name="number_of_negative_traffic_area_results_label">Negatywne (Miasto)</string>
+    <string name="number_of_exams_label">Liczba egzaminów ogółem</string>
+    <string name="add_exam_label">Dodaj egzamin</string>
+    <string name="rate_of_positive_results">zdawalnosc</string>
+    <string name="positive_results">pozytywne</string>
+    <string name="did_not_take_an_exam_results">nieprzystapienia</string>
+    <string name="negative_maneuvring_area_results">negatywne_plac</string>
+    <string name="negative_traffic_area_results">negatywne_miasto</string>
+    <string name="number_of_exams_total">liczba_egzaminow_ogolem</string>
+    <string name="date_of_exam">Data egzaminu:</string>
+    <string name="result_of_an_exam">Wynik egzaminu:</string>
+    <string name="P">P</string>
+    <string name="X">X</string>
+    <string name="N">N</string>
+    <string name="n">n</string>
+    <string name="OK">OK</string>
+    <string name="cancel">Anuluj</string>
+    <string name="result_not_chosen">Nie wybrano wyniku egzaminu</string>
+    <string-array name="categories">
+        <item>AM</item>
+        <item>A1</item>
+        <item>A2</item>
+        <item>A</item>
+        <item>B</item>
+        <item>B96</item>
+        <item>B+E</item>
+        <item>B1</item>
+        <item>C</item>
+        <item>C+E</item>
+        <item>C1</item>
+        <item>C1+E</item>
+        <item>D</item>
+        <item>D+E</item>
+        <item>D1+E</item>
+        <item>T</item>
+    </string-array>
+</resources>
