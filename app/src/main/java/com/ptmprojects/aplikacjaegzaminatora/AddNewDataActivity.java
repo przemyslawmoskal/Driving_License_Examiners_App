@@ -1,5 +1,6 @@
 package com.ptmprojects.aplikacjaegzaminatora;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,12 +16,15 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 
-public class AddNewDataActivity extends AppCompatActivity {
+public class AddNewDataActivity extends AppCompatActivity implements View.OnClickListener {
+    public static final String DEFAULT_CHOOSE_CATEGORY_SPINNER_VALUE = "B";
     private Button mOkButton;
     private Button mCancelButton;
-    private DatePicker mDatePicker;
+    private Button mChooseDateButton;
+    //    private DatePicker mDatePicker;
     private RadioGroup mRadioGroup;
     private Spinner mChooseCategorySpinner;
+    private int mYear, mMonth, mDayOfMonth;
 
     public static final String TAG = "AddNewDataActivity";
 
@@ -32,25 +36,29 @@ public class AddNewDataActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_new_data);
 
         mRadioGroup = findViewById(R.id.radio_group);
+
         mChooseCategorySpinner = findViewById(R.id.choose_category_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.categories, android.R.layout.simple_spinner_item);
-// Specify the layout to use when the list of choices appears
+        int spinnerDefaultPosition = adapter.getPosition(DEFAULT_CHOOSE_CATEGORY_SPINNER_VALUE);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-// Apply the adapter to the spinner
         mChooseCategorySpinner.setAdapter(adapter);
+        mChooseCategorySpinner.setSelection(spinnerDefaultPosition);
 
-        Calendar now = Calendar.getInstance();
-        mDatePicker = findViewById(R.id.datePicker);
-        mDatePicker.init(
-                now.get(Calendar.YEAR),
-                now.get(Calendar.MONTH),
-                now.get(Calendar.DAY_OF_MONTH),
-                new DatePicker.OnDateChangedListener() {
-                    @Override
-                    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                    }
-                });
+        mChooseDateButton = findViewById(R.id.choose_date_button);
+        mChooseDateButton.setOnClickListener(this);
+
+//        Calendar now = Calendar.getInstance();
+//        mDatePicker = findViewById(R.id.datePicker);
+//        mDatePicker.init(
+//                now.get(Calendar.YEAR),
+//                now.get(Calendar.MONTH),
+//                now.get(Calendar.DAY_OF_MONTH),
+//                new DatePicker.OnDateChangedListener() {
+//                    @Override
+//                    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+//                    }
+//                });
         mCancelButton = findViewById(R.id.cancel_button);
 
         mOkButton = findViewById(R.id.ok_button);
@@ -63,9 +71,12 @@ public class AddNewDataActivity extends AppCompatActivity {
                     RadioButton selectedRadioButton = (RadioButton) findViewById(selectedRadioButtonId);
 
                     ExamResult examResult = new ExamResult();
-                    examResult.setYear(mDatePicker.getYear());
-                    examResult.setMonth(mDatePicker.getMonth() + 1); // + 1 needed (January == 0, December == 11), etc...
-                    examResult.setDay(mDatePicker.getDayOfMonth());
+
+
+                    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//                    examResult.setYear(mDatePicker.getYear());
+//                    examResult.setMonth(mDatePicker.getMonth() + 1); // + 1 needed (January == 0, December == 11), etc...
+//                    examResult.setDay(mDatePicker.getDayOfMonth());
                     examResult.setResult(ResultsBank.convertStringResultToCorrespondingInt(selectedRadioButton.getText().toString()));
                     // Just a sample ordering, needs to be implemented yet:
                     int orderNumber = 0;
@@ -82,5 +93,31 @@ public class AddNewDataActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == mChooseDateButton) {
+
+            // Get Current Date
+            final Calendar c = Calendar.getInstance();
+            mYear = c.get(Calendar.YEAR);
+            mMonth = c.get(Calendar.MONTH);
+            mDayOfMonth = c.get(Calendar.DAY_OF_MONTH);
+
+
+            DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                    new DatePickerDialog.OnDateSetListener() {
+
+                        @Override
+                        public void onDateSet(DatePicker view, int year,
+                                              int monthOfYear, int dayOfMonth) {
+
+                            mChooseDateButton.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+
+                        }
+                    }, mYear, mMonth, mDayOfMonth);
+            datePickerDialog.show();
+        }
     }
 }

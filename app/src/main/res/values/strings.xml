@@ -22,6 +22,8 @@
     <string name="OK">OK</string>
     <string name="cancel">Anuluj</string>
     <string name="result_not_chosen">Nie wybrano wyniku egzaminu</string>
+    <string name="choose_category_label">Kategoria</string>
+    <string name="choose_date">Wybierz datę</string>
     <string-array name="categories">
         <item>AM</item>
         <item>A1</item>
