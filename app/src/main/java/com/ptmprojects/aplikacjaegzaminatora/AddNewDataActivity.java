@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.RadioButton;
@@ -32,6 +33,12 @@ public class AddNewDataActivity extends AppCompatActivity {
 
         mRadioGroup = findViewById(R.id.radio_group);
         mChooseCategorySpinner = findViewById(R.id.choose_category_spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.categories, android.R.layout.simple_spinner_item);
+// Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+// Apply the adapter to the spinner
+        mChooseCategorySpinner.setAdapter(adapter);
 
         Calendar now = Calendar.getInstance();
         mDatePicker = findViewById(R.id.datePicker);
@@ -44,7 +51,7 @@ public class AddNewDataActivity extends AppCompatActivity {
                     public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                     }
                 });
-        mCancelButton = findViewById(R.id.anuluj_button);
+        mCancelButton = findViewById(R.id.cancel_button);
 
         mOkButton = findViewById(R.id.ok_button);
         mOkButton.setOnClickListener(new View.OnClickListener() {

@@ -7,7 +7,7 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/zdawalnosc"
+        android:id="@+id/rate_of_positive_results"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -22,7 +22,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/zdawalnosc_liczba"
+        android:id="@+id/rate_of_positive_results_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -34,7 +34,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/pozytywne"
+        android:id="@+id/positive"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -45,10 +45,10 @@
         app:layout_constraintBottom_toBottomOf="@+id/positive_result"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/zdawalnosc" />
+        app:layout_constraintTop_toBottomOf="@+id/rate_of_positive_results" />
 
     <TextView
-        android:id="@+id/pozytywne_liczba"
+        android:id="@+id/positive_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -60,7 +60,7 @@
         app:layout_constraintTop_toBottomOf="@+id/rate_of_positive_results_result" />
 
     <TextView
-        android:id="@+id/nieprzystapienia"
+        android:id="@+id/did_not_take_an_exam"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -71,10 +71,10 @@
         app:layout_constraintBottom_toBottomOf="@+id/did_not_take_an_exam_result"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pozytywne" />
+        app:layout_constraintTop_toBottomOf="@+id/positive" />
 
     <TextView
-        android:id="@+id/nieprzystapienia_liczba"
+        android:id="@+id/did_not_take_an_exam_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -93,7 +93,7 @@
         app:layout_constraintGuide_begin="187dp" />
 
     <TextView
-        android:id="@+id/negatywne_plac"
+        android:id="@+id/negative_maneuvring_area"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -104,10 +104,10 @@
         app:layout_constraintBottom_toBottomOf="@+id/negative_maneuvring_area_result"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nieprzystapienia" />
+        app:layout_constraintTop_toBottomOf="@+id/did_not_take_an_exam" />
 
     <TextView
-        android:id="@+id/negatywne_plac_liczba"
+        android:id="@+id/negative_maneuvring_area_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -119,21 +119,21 @@
         app:layout_constraintTop_toBottomOf="@+id/did_not_take_an_exam_result" />
 
     <TextView
-        android:id="@+id/negatywne_miasto"
+        android:id="@+id/negative_traffic_area"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="@string/negatywne_miasto_etykieta"
+        android:text="@string/number_of_negative_traffic_area_results_label"
         app:layout_constraintBottom_toBottomOf="@+id/negative_traffic_area_result"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/negatywne_plac" />
+        app:layout_constraintTop_toBottomOf="@+id/negative_maneuvring_area" />
 
     <TextView
-        android:id="@+id/negatywne_miasto_liczba"
+        android:id="@+id/negative_traffic_area_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -145,7 +145,7 @@
         app:layout_constraintTop_toBottomOf="@+id/negative_maneuvring_area_result" />
 
     <TextView
-        android:id="@+id/liczba_egzaminow"
+        android:id="@+id/number_of_exams"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -154,7 +154,7 @@
         android:text="@string/number_of_exams_label"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/negatywne_miasto" />
+        app:layout_constraintTop_toBottomOf="@+id/negative_traffic_area" />
 
     <TextView
         android:id="@+id/number_of_exams_result"
