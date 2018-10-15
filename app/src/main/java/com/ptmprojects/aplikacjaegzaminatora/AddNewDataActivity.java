@@ -63,9 +63,13 @@ public class AddNewDataActivity extends AppCompatActivity implements View.OnClic
                 int selectedRadioButtonId = mRadioGroup.getCheckedRadioButtonId();
                 CharSequence textFromChooseDateButton = mChooseDateButton.getText();
                 CharSequence categoryChosenFromSpinner = mChooseCategorySpinner.getSelectedItem().toString();
-                Toast.makeText(AddNewDataActivity.this, categoryChosenFromSpinner, Toast.LENGTH_SHORT).show();
-                if (selectedRadioButtonId != -1 & !textFromChooseDateButton.equals(getString(R.string.choose_date))) {
-
+                if (selectedRadioButtonId == -1 && textFromChooseDateButton.equals(getString(R.string.choose_date))) {
+                    Toast.makeText(AddNewDataActivity.this, R.string.date_and_result_not_chosen, Toast.LENGTH_SHORT).show();
+                } else if(selectedRadioButtonId == -1) {
+                    Toast.makeText(AddNewDataActivity.this, R.string.result_not_chosen, Toast.LENGTH_SHORT).show();
+                } else if(textFromChooseDateButton.equals(getString(R.string.choose_date))) {
+                    Toast.makeText(AddNewDataActivity.this, R.string.date_not_chosen, Toast.LENGTH_SHORT).show();
+                } else {
                     RadioButton selectedRadioButton = (RadioButton) findViewById(selectedRadioButtonId);
 
                     ExamResult examResult = new ExamResult();
@@ -82,9 +86,6 @@ public class AddNewDataActivity extends AppCompatActivity implements View.OnClic
 
                     Intent i = new Intent(AddNewDataActivity.this, MainActivity.class);
                     startActivity(i);
-
-                } else {
-                    Toast.makeText(AddNewDataActivity.this, R.string.adding_new_exam_result_failed, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -108,12 +109,23 @@ public class AddNewDataActivity extends AppCompatActivity implements View.OnClic
                         @Override
                         public void onDateSet(DatePicker view, int year,
                                               int monthOfYear, int dayOfMonth) {
+                            Calendar chosenDate = Calendar.getInstance();
+                            chosenDate.set(year, monthOfYear, dayOfMonth);
+                            Calendar today = Calendar.getInstance();
 
-                            mChosenYear = year;
-                            mChosenMonth = monthOfYear + 1;
-                            mChosenDayOfMonth = dayOfMonth;
-                            mChooseDateButton.setText(mChosenDayOfMonth + "-" + (mChosenMonth + 1) + "-" + mChosenYear);
-
+                            int resultOfDatesComparison = chosenDate.compareTo(today);
+                            if (resultOfDatesComparison > 0) {
+                                Toast.makeText(AddNewDataActivity.this, R.string.chosen_date_greater_than_today, Toast.LENGTH_SHORT).show();
+                                mChosenYear = 0;
+                                mChosenMonth = 0;
+                                mChosenDayOfMonth = 0;
+                                mChooseDateButton.setText(getString(R.string.choose_date));
+                            } else {
+                                mChosenYear = year;
+                                mChosenMonth = monthOfYear + 1;
+                                mChosenDayOfMonth = dayOfMonth;
+                                mChooseDateButton.setText(mChosenDayOfMonth + "-" + (mChosenMonth) + "-" + mChosenYear);
+                            }
                         }
                     }, mYear, mMonth, mDayOfMonth);
             datePickerDialog.show();
