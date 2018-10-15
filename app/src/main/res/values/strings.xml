@@ -21,7 +21,7 @@
     <string name="n">n</string>
     <string name="OK">OK</string>
     <string name="cancel">Anuluj</string>
-    <string name="result_not_chosen">Nie wybrano wyniku egzaminu</string>
+    <string name="adding_new_exam_result_failed">Nie wybrano daty lub wyniku egzaminu</string>
     <string name="choose_category_label">Kategoria</string>
     <string name="choose_date">Wybierz datę</string>
     <string-array name="categories">

@@ -21,10 +21,9 @@ public class AddNewDataActivity extends AppCompatActivity implements View.OnClic
     private Button mOkButton;
     private Button mCancelButton;
     private Button mChooseDateButton;
-    //    private DatePicker mDatePicker;
     private RadioGroup mRadioGroup;
     private Spinner mChooseCategorySpinner;
-    private int mYear, mMonth, mDayOfMonth;
+    private int mYear, mMonth, mDayOfMonth, mChosenYear, mChosenMonth, mChosenDayOfMonth;
 
     public static final String TAG = "AddNewDataActivity";
 
@@ -48,36 +47,33 @@ public class AddNewDataActivity extends AppCompatActivity implements View.OnClic
         mChooseDateButton = findViewById(R.id.choose_date_button);
         mChooseDateButton.setOnClickListener(this);
 
-//        Calendar now = Calendar.getInstance();
-//        mDatePicker = findViewById(R.id.datePicker);
-//        mDatePicker.init(
-//                now.get(Calendar.YEAR),
-//                now.get(Calendar.MONTH),
-//                now.get(Calendar.DAY_OF_MONTH),
-//                new DatePicker.OnDateChangedListener() {
-//                    @Override
-//                    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-//                    }
-//                });
         mCancelButton = findViewById(R.id.cancel_button);
+        mCancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(AddNewDataActivity.this, MainActivity.class);
+                startActivity(i);
+            }
+        });
 
         mOkButton = findViewById(R.id.ok_button);
         mOkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int selectedRadioButtonId = mRadioGroup.getCheckedRadioButtonId();
-                if (selectedRadioButtonId != -1) {
+                CharSequence textFromChooseDateButton = mChooseDateButton.getText();
+                CharSequence categoryChosenFromSpinner = mChooseCategorySpinner.getSelectedItem().toString();
+                Toast.makeText(AddNewDataActivity.this, categoryChosenFromSpinner, Toast.LENGTH_SHORT).show();
+                if (selectedRadioButtonId != -1 & !textFromChooseDateButton.equals(getString(R.string.choose_date))) {
 
                     RadioButton selectedRadioButton = (RadioButton) findViewById(selectedRadioButtonId);
 
                     ExamResult examResult = new ExamResult();
-
-
-                    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//                    examResult.setYear(mDatePicker.getYear());
-//                    examResult.setMonth(mDatePicker.getMonth() + 1); // + 1 needed (January == 0, December == 11), etc...
-//                    examResult.setDay(mDatePicker.getDayOfMonth());
+                    examResult.setYear(mChosenYear);
+                    examResult.setMonth(mChosenMonth);
+                    examResult.setDay(mChosenDayOfMonth);
                     examResult.setResult(ResultsBank.convertStringResultToCorrespondingInt(selectedRadioButton.getText().toString()));
+                    examResult.setCategory(categoryChosenFromSpinner.toString());
                     // Just a sample ordering, needs to be implemented yet:
                     int orderNumber = 0;
                     examResult.setOrderNumber(orderNumber++);
@@ -88,7 +84,7 @@ public class AddNewDataActivity extends AppCompatActivity implements View.OnClic
                     startActivity(i);
 
                 } else {
-                    Toast.makeText(AddNewDataActivity.this, R.string.result_not_chosen, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddNewDataActivity.this, R.string.adding_new_exam_result_failed, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -113,7 +109,10 @@ public class AddNewDataActivity extends AppCompatActivity implements View.OnClic
                         public void onDateSet(DatePicker view, int year,
                                               int monthOfYear, int dayOfMonth) {
 
-                            mChooseDateButton.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                            mChosenYear = year;
+                            mChosenMonth = monthOfYear + 1;
+                            mChosenDayOfMonth = dayOfMonth;
+                            mChooseDateButton.setText(mChosenDayOfMonth + "-" + (mChosenMonth + 1) + "-" + mChosenYear);
 
                         }
                     }, mYear, mMonth, mDayOfMonth);
