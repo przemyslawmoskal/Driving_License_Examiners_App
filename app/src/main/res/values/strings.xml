@@ -27,6 +27,7 @@
     <string name="choose_category_label">Kategoria</string>
     <string name="choose_date">Wybierz datę</string>
     <string name="chosen_date_greater_than_today">Wybrano datę późniejszą od dzisiejszej</string>
+    <string name="choose_exams_range">Wybierz zakres dat egzaminów:</string>
     <string-array name="categories">
         <item>AM</item>
         <item>A1</item>
@@ -44,5 +45,13 @@
         <item>D+E</item>
         <item>D1+E</item>
         <item>T</item>
+    </string-array>
+    <string-array name="time_scopes">
+        <item>Dzisiaj</item>
+        <item>Ten tydzień</item>
+        <item>Ten miesiąc</item>
+        <item>Ten rok</item>
+        <item>Wszystkie</item>
+        <item>Wybierz zakres dat...</item>
     </string-array>
 </resources>
