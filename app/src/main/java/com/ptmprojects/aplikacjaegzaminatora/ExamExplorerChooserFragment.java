@@ -1,10 +1,10 @@
 package com.ptmprojects.aplikacjaegzaminatora;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +14,20 @@ import android.widget.Spinner;
 
 public class ExamExplorerChooserFragment extends Fragment {
     private static final String DEFAULT_CHOOSE_DATE_RANGE_SPINNER_VALUE = "Dzisiaj";
+    private Callbacks mCallbacks;
     private Spinner mChooseDateRangeSpinner;
-    private Button mSearchButton;
+    private Button mShowExamsButton;
 
+    //Interface needed for hosting Activities:
+    public interface Callbacks {
+        void onShowExamsButtonClicked();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mCallbacks = (Callbacks) context;
+    }
 
     @Nullable
     @Override
@@ -31,15 +42,18 @@ public class ExamExplorerChooserFragment extends Fragment {
         mChooseDateRangeSpinner.setAdapter(adapter);
         mChooseDateRangeSpinner.setSelection(spinnerDefaultPosition);
 
-        mSearchButton = (Button) v.findViewById(R.id.showExamsButton);
-        mSearchButton.setOnClickListener((view) -> {
-            Fragment fragment = new ExamExplorerListFragment();
-            FragmentManager fm = getActivity().getSupportFragmentManager();
-            fm.beginTransaction()
-                    .add(R.id.detail_fragment_container, fragment)
-                    .commit();
+        mShowExamsButton = (Button) v.findViewById(R.id.showExamsButton);
+        mShowExamsButton.setOnClickListener((view) -> {
+            // Querying db here or in the Callbacks.onShowExamsbuttonClicked() ?
+            mCallbacks.onShowExamsButtonClicked();
         });
 
         return v;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallbacks = null;
     }
 }
