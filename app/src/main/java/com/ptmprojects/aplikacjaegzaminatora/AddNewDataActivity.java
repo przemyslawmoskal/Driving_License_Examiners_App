@@ -48,45 +48,39 @@ public class AddNewDataActivity extends AppCompatActivity implements View.OnClic
         mChooseDateButton.setOnClickListener(this);
 
         mCancelButton = findViewById(R.id.cancel_button);
-        mCancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(AddNewDataActivity.this, MainActivity.class);
-                startActivity(i);
-            }
+        mCancelButton.setOnClickListener(v -> {
+            Intent i = new Intent(AddNewDataActivity.this, MainActivity.class);
+            startActivity(i);
         });
 
         mOkButton = findViewById(R.id.ok_button);
-        mOkButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int selectedRadioButtonId = mRadioGroup.getCheckedRadioButtonId();
-                CharSequence textFromChooseDateButton = mChooseDateButton.getText();
-                CharSequence categoryChosenFromSpinner = mChooseCategorySpinner.getSelectedItem().toString();
-                if (selectedRadioButtonId == -1 && textFromChooseDateButton.equals(getString(R.string.choose_date))) {
-                    Toast.makeText(AddNewDataActivity.this, R.string.date_and_result_not_chosen, Toast.LENGTH_SHORT).show();
-                } else if(selectedRadioButtonId == -1) {
-                    Toast.makeText(AddNewDataActivity.this, R.string.result_not_chosen, Toast.LENGTH_SHORT).show();
-                } else if(textFromChooseDateButton.equals(getString(R.string.choose_date))) {
-                    Toast.makeText(AddNewDataActivity.this, R.string.date_not_chosen, Toast.LENGTH_SHORT).show();
-                } else {
-                    RadioButton selectedRadioButton = (RadioButton) findViewById(selectedRadioButtonId);
+        mOkButton.setOnClickListener(v -> {
+            int selectedRadioButtonId = mRadioGroup.getCheckedRadioButtonId();
+            CharSequence textFromChooseDateButton = mChooseDateButton.getText();
+            CharSequence categoryChosenFromSpinner = mChooseCategorySpinner.getSelectedItem().toString();
+            if (selectedRadioButtonId == -1 && textFromChooseDateButton.equals(getString(R.string.choose_date))) {
+                Toast.makeText(AddNewDataActivity.this, R.string.date_and_result_not_chosen, Toast.LENGTH_SHORT).show();
+            } else if(selectedRadioButtonId == -1) {
+                Toast.makeText(AddNewDataActivity.this, R.string.result_not_chosen, Toast.LENGTH_SHORT).show();
+            } else if(textFromChooseDateButton.equals(getString(R.string.choose_date))) {
+                Toast.makeText(AddNewDataActivity.this, R.string.date_not_chosen, Toast.LENGTH_SHORT).show();
+            } else {
+                RadioButton selectedRadioButton = (RadioButton) findViewById(selectedRadioButtonId);
 
-                    ExamResult examResult = new ExamResult();
-                    examResult.setYear(mChosenYear);
-                    examResult.setMonth(mChosenMonth);
-                    examResult.setDay(mChosenDayOfMonth);
-                    examResult.setResult(ResultsBank.convertStringResultToCorrespondingInt(selectedRadioButton.getText().toString()));
-                    examResult.setCategory(categoryChosenFromSpinner.toString());
-                    // Just a sample ordering, needs to be implemented yet:
-                    int orderNumber = 0;
-                    examResult.setOrderNumber(orderNumber++);
+                ExamResult examResult = new ExamResult();
+                examResult.setYear(mChosenYear);
+                examResult.setMonth(mChosenMonth);
+                examResult.setDay(mChosenDayOfMonth);
+                examResult.setResult(ResultsBank.convertStringResultToCorrespondingInt(selectedRadioButton.getText().toString()));
+                examResult.setCategory(categoryChosenFromSpinner.toString());
+                // Just a sample ordering, needs to be implemented yet:
+                int orderNumber = 0;
+                examResult.setOrderNumber(orderNumber++);
 
-                    resultsBank.addResult(examResult);
+                resultsBank.addResult(examResult);
 
-                    Intent i = new Intent(AddNewDataActivity.this, MainActivity.class);
-                    startActivity(i);
-                }
+                Intent i = new Intent(AddNewDataActivity.this, MainActivity.class);
+                startActivity(i);
             }
         });
 
