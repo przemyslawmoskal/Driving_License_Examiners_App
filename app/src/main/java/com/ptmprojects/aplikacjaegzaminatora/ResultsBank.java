@@ -5,7 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,12 +22,20 @@ public class ResultsBank {
     public static final int NEGATIVE_MANEUVRING_AREA_RESULT = 1;
     public static final int NEGATIVE_TRAFFIC_AREA_RESULT = 0;
 
+    public static final int USER_DEFINED_PERIOD_OF_TIME_EXAMS = 0;
+    public static final int TODAY_EXAMS = 1;
+    public static final int THIS_WEEK_EXAMS = 7;
+    public static final int THIS_MONTH_EXAMS = 30;
+    public static final int THIS_YEAR_EXAMS = 365;
+    public static final int ALL_TIME_EXAMS = 1000;
+
+    public static final SimpleDateFormat sdateFormat= new SimpleDateFormat("dd-MM-yyyy");
+
     private static ResultsBank sResultsBank;
     private Context mContext;
     private SQLiteDatabase mDatabase;
 
     private ResultsBank(Context context) {
-
 
         mContext = context.getApplicationContext();
         mDatabase = new ResultsBaseHelper(mContext)
@@ -58,6 +68,15 @@ public class ResultsBank {
                 throw new IllegalArgumentException("Invalid exam result!");
         }
     }
+
+    // to return int 20181015 from date 15-10-2018:
+//    public static int convertCalendarToInteger(Calendar calendar) {
+//        int year = calendar.get(Calendar.YEAR);
+//        int month = calendar.get(Calendar.MONTH) + 1; // January == 0, February == 1, etc...
+//        int day = calendar.get(Calendar.DAY_OF_MONTH);
+//        String wholeDateAsString = "" + year + month + day;
+//        return Integer.valueOf(wholeDateAsString);
+//    }
 
     public static ResultsBank get(Context context) {
         if (sResultsBank == null) {

@@ -33,6 +33,12 @@
     <string name="start_date">Data początkowa</string>
     <string name="end_date">Data końcowa</string>
     <string name="show_exams">Pokaż egzaminy</string>
+    <string name="today">Dzisiaj</string>
+    <string name="this_week">Ten tydzień</string>
+    <string name="this_month">Ten miesiąc</string>
+    <string name="this_year">Ten rok</string>
+    <string name="all_time_exams">Wszystkie</string>
+    <string name="choose_dates_range">Wybierz zakres dat...</string>
     <string-array name="categories">
         <item>AM</item>
         <item>A1</item>
@@ -50,13 +56,5 @@
         <item>D+E</item>
         <item>D1+E</item>
         <item>T</item>
-    </string-array>
-    <string-array name="time_scopes">
-        <item>Dzisiaj</item>
-        <item>Ten tydzień</item>
-        <item>Ten miesiąc</item>
-        <item>Ten rok</item>
-        <item>Wszystkie</item>
-        <item>Własny...</item>
     </string-array>
 </resources>
