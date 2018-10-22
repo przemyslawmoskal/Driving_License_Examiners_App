@@ -4,9 +4,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,6 +31,7 @@ public class ResultsBank {
     public static final int ALL_TIME_EXAMS = 1000;
 
     public static final SimpleDateFormat sdateFormat= new SimpleDateFormat("dd-MM-yyyy");
+    public static final String TAG = "ResultsBank.java";
 
     private static ResultsBank sResultsBank;
     private Context mContext;
@@ -88,6 +91,53 @@ public class ResultsBank {
         List<ExamResult> results = new ArrayList<>();
 
         ResultsCursorWrapper cursor = queryResults(null, null);
+
+        try {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                results.add(cursor.getExamResult());
+                cursor.moveToNext();
+            }
+        } finally {
+            cursor.close();
+        }
+
+        return results;
+    }
+
+
+    public List<ExamResult> getResultsForSpecifiedPeriodOfTime(int typeOfChosenPeriodOfTime, Calendar optionalStartDate, Calendar optionalEndDate) {
+        List<ExamResult> results = new ArrayList<>();
+        ResultsCursorWrapper cursor = null;
+        Calendar today = Calendar.getInstance();
+        Log.d(TAG, "typeOfPeriod: " + typeOfChosenPeriodOfTime +
+                ", startDate: " + optionalStartDate +
+                ", endDate: " + optionalEndDate +
+                ", Calendar YEAR: " + today.get(Calendar.YEAR) +
+                ", Calendar MONTH: " + today.get(Calendar.MONTH) +
+                ", Calendar DAY: " + today.get(Calendar.DAY_OF_MONTH));
+
+
+        if(typeOfChosenPeriodOfTime == USER_DEFINED_PERIOD_OF_TIME_EXAMS) {
+            // needs to be implemented yet
+        } else if(typeOfChosenPeriodOfTime == TODAY_EXAMS) {
+            cursor = queryResults(ResultsTable.Cols.YEAR + " = " + today.get(Calendar.YEAR) +
+                    " AND " + ResultsTable.Cols.MONTH + " = " + (today.get(Calendar.MONTH) + 1) +
+                    " AND " + ResultsTable.Cols.DAY + " = " + today.get(Calendar.DAY_OF_MONTH), null);
+
+        } else if(typeOfChosenPeriodOfTime == THIS_WEEK_EXAMS) {
+            // needs to be implemented yet
+
+        } else if(typeOfChosenPeriodOfTime == THIS_MONTH_EXAMS) {
+            cursor = queryResults(ResultsTable.Cols.YEAR + " = " + today.get(Calendar.YEAR) +
+                    " AND " + ResultsTable.Cols.MONTH + " = " + (today.get(Calendar.MONTH) + 1), null);
+
+        } else if(typeOfChosenPeriodOfTime == THIS_YEAR_EXAMS) {
+            cursor = queryResults(ResultsTable.Cols.YEAR + " = " + today.get(Calendar.YEAR), null);
+
+        } else if(typeOfChosenPeriodOfTime == ALL_TIME_EXAMS) {
+            cursor = queryResults(null, null);
+        }
 
         try {
             cursor.moveToFirst();
@@ -225,4 +275,5 @@ public class ResultsBank {
             cursorForAllRows.close();
         }
     }
+
 }

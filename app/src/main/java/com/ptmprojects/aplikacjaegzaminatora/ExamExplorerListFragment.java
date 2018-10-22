@@ -25,17 +25,32 @@ public class ExamExplorerListFragment extends Fragment{
     private ExamAdapter mAdapter;
 
 
+    //
+    private int mTypeOfChosenPeriodOfTime;
+    private Calendar startDate;
+    private Calendar endDate;
+    //
+
     public static ExamExplorerListFragment newInstance(Integer periodOfTime, Calendar optionalStartDate, Calendar optionalEndDate) {
         Bundle args = new Bundle();
-        if (periodOfTime > 0) {
-            args.putInt(ARG_TYPE_OF_CHOSEN_PERIOD_OF_TIME, periodOfTime);
-        } else {
+        args.putInt(ARG_TYPE_OF_CHOSEN_PERIOD_OF_TIME, periodOfTime);
+        if (periodOfTime == 0) {
             args.putSerializable(ARG_CHOSEN_START_DATE, optionalStartDate);
             args.putSerializable(ARG_CHOSEN_END_DATE, optionalEndDate);
         }
         ExamExplorerListFragment fragment = new ExamExplorerListFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mTypeOfChosenPeriodOfTime = getArguments().getInt(ARG_TYPE_OF_CHOSEN_PERIOD_OF_TIME);
+        if (mTypeOfChosenPeriodOfTime == 0) {
+            startDate =(Calendar) getArguments().getSerializable(ARG_CHOSEN_START_DATE);
+            endDate= (Calendar)getArguments().getSerializable(ARG_CHOSEN_END_DATE);
+        }
     }
 
     @Nullable
@@ -47,16 +62,17 @@ public class ExamExplorerListFragment extends Fragment{
 
 
 
-        updateUI();
+        updateUI(mTypeOfChosenPeriodOfTime, startDate, endDate);
         return v;
     }
 
-    private void updateUI() {
-        // it should not be "getResults" = it should just count how many results are needed, not all:
+    private void updateUI(int typeOfChosenPeriodOfTime, Calendar optionalStartDate, Calendar optionalEndDate) {
         ResultsBank bank = ResultsBank.get(getActivity());
-        List<ExamResult> results = bank.getResults();
+        // it should not be "getResults" = it should just count how many results are needed, not all:
+//        List<ExamResult> results = bank.getResults();
+        List<ExamResult> resultsForSpecifiedPeriodOfTime = bank.getResultsForSpecifiedPeriodOfTime(typeOfChosenPeriodOfTime, optionalStartDate, optionalEndDate);
 
-        mAdapter = new ExamAdapter(results);
+        mAdapter = new ExamAdapter(resultsForSpecifiedPeriodOfTime);
         mExamListRecyclerView.setAdapter(mAdapter);
     }
 
