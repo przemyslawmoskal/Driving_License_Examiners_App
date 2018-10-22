@@ -39,6 +39,10 @@
     <string name="this_year">Ten rok</string>
     <string name="all_time_exams">Wszystkie</string>
     <string name="choose_dates_range">Wybierz zakres dat...</string>
+    <string name="date">Data</string>
+    <string name="category">Kategoria</string>
+    <string name="result">Wynik</string>
+    <string name="delete">Usuń</string>
     <string-array name="categories">
         <item>AM</item>
         <item>A1</item>
