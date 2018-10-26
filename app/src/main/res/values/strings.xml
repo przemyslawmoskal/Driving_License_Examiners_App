@@ -43,6 +43,8 @@
     <string name="category">Kategoria</string>
     <string name="result">Wynik</string>
     <string name="delete">Usuń</string>
+    <string name="chosen_date_is_too_late">Wybierz wcześniejszą datę</string>
+    <string name="chosen_date_earlier_than_start_date">Data końcowa późniejsza od początkowej</string>
     <string-array name="categories">
         <item>AM</item>
         <item>A1</item>

@@ -1,5 +1,6 @@
 package com.ptmprojects.aplikacjaegzaminatora;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -29,7 +31,69 @@ public class ExamExplorerChooserFragment extends Fragment implements View.OnClic
 
     @Override
     public void onClick(View v) {
+        int currentYear, currentMonth, currentDayOfMonth;
+        Calendar c;
+        DatePickerDialog datePickerDialog;
         switch(v.getId()) {
+            case R.id.start_date_button:
+                // Get Current Date
+                c = Calendar.getInstance();
+                currentYear = c.get(Calendar.YEAR);
+                currentMonth = c.get(Calendar.MONTH);
+                currentDayOfMonth = c.get(Calendar.DAY_OF_MONTH);
+
+
+                datePickerDialog = new DatePickerDialog(getActivity(),
+                        (view, year, monthOfYear, dayOfMonth) -> {
+                            Calendar chosenStartDateFromDatePicker = Calendar.getInstance();
+                            chosenStartDateFromDatePicker.set(year, monthOfYear, dayOfMonth);
+                            Calendar today = Calendar.getInstance();
+
+                            int chosenStartDateComparedToToday = chosenStartDateFromDatePicker.compareTo(today);
+                            int chosenStartDateComparedToChosenEndDate = chosenStartDateFromDatePicker.compareTo(mEndDate);
+                            if (chosenStartDateComparedToToday > 0 || chosenStartDateComparedToChosenEndDate > 0) {
+                                Toast.makeText(getActivity(), R.string.chosen_date_is_too_late, Toast.LENGTH_SHORT).show();
+                                mStartDate = today;
+                                mStartDateButton.setText(getString(R.string.choose_date));
+                            } else {
+//                                mChosenDateToDatabase = DateUtilities.convertCalendarToIntUsedInDatabase(chosenStartDateFromDatePicker);
+                                mStartDate = chosenStartDateFromDatePicker;
+                                mStartDateButton.setText(DateUtilities.DATE_FORMAT_USED_ON_THE_BUTTONS.format(chosenStartDateFromDatePicker.getTime()));
+                            }
+                        }, currentYear, currentMonth, currentDayOfMonth);
+                datePickerDialog.show();
+                break;
+            case R.id.end_date_button:
+                // Get Current Date
+                c = Calendar.getInstance();
+                currentYear = c.get(Calendar.YEAR);
+                currentMonth = c.get(Calendar.MONTH);
+                currentDayOfMonth = c.get(Calendar.DAY_OF_MONTH);
+
+                datePickerDialog = new DatePickerDialog(getActivity(),
+                        (view, year, monthOfYear, dayOfMonth) -> {
+                            Calendar chosenEndDateFromDatePicker = Calendar.getInstance();
+                            chosenEndDateFromDatePicker.set(year, monthOfYear, dayOfMonth);
+                            Calendar today = Calendar.getInstance();
+
+                            int chosenEndDateComparedToToday = chosenEndDateFromDatePicker.compareTo(today);
+                            int chosenEndDateComparedToChosenStartDate = chosenEndDateFromDatePicker.compareTo(mStartDate);
+
+                            if (chosenEndDateComparedToToday > 0) {
+                                Toast.makeText(getActivity(), R.string.chosen_date_greater_than_today, Toast.LENGTH_SHORT).show();
+                                mEndDate = today;
+                                mEndDateButton.setText(getString(R.string.choose_date));
+                            } else if (chosenEndDateComparedToChosenStartDate < 0) {
+                                Toast.makeText(getActivity(), R.string.chosen_date_earlier_than_start_date, Toast.LENGTH_SHORT).show();
+                                mEndDate = today;
+                                mEndDateButton.setText(getString(R.string.choose_date));
+                            } else {
+                                mEndDate = chosenEndDateFromDatePicker;
+                                mEndDateButton.setText(DateUtilities.DATE_FORMAT_USED_ON_THE_BUTTONS.format(chosenEndDateFromDatePicker.getTime()));
+                            }
+                        }, currentYear, currentMonth, currentDayOfMonth);
+                datePickerDialog.show();
+                break;
             case R.id.showExamsButton:
                 if(mTagFromSpinner > 0) {
                     mCallbacks.onShowExamsButtonClicked(mTagFromSpinner, null, null);
@@ -62,11 +126,13 @@ public class ExamExplorerChooserFragment extends Fragment implements View.OnClic
         mStartDateButton = (Button) v.findViewById(R.id.start_date_button);
         mStartDateButton.setText(ResultsBank.sDateFormat.format(today.getTime()));
         mStartDateButton.setVisibility(View.GONE);
+        mStartDateButton.setOnClickListener(this);
 
-        mEndDateButton = (Button) v.findViewById(R.id.end_date_button);
         mEndDate = today;
+        mEndDateButton = (Button) v.findViewById(R.id.end_date_button);
         mEndDateButton.setText(ResultsBank.sDateFormat.format(today.getTime()));
-        mStartDateButton.setVisibility(View.GONE);
+        mEndDateButton.setVisibility(View.GONE);
+        mEndDateButton.setOnClickListener(this);
 
         mChooseDateRangeSpinner = v.findViewById(R.id.date_range_chooser_spinner);
         List<StringWithCorrespondingTag> listOfSpinnerItems = new ArrayList<StringWithCorrespondingTag>();

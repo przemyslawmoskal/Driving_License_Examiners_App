@@ -57,8 +57,6 @@ public class ExamExplorerListFragment extends Fragment{
         mExamListRecyclerView = (RecyclerView) v.findViewById(R.id.exam_explorer_list_recycler_view);
         mExamListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-
-
         updateUI(mTypeOfChosenPeriodOfTime, startDate, endDate);
         return v;
     }

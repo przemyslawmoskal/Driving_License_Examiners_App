@@ -109,7 +109,11 @@ public class ResultsBank {
 
 
         if(typeOfChosenPeriodOfTime == USER_DEFINED_PERIOD_OF_TIME_EXAMS) {
-            // needs to be implemented yet
+            String formattedStartDate = DateUtilities.DATE_FORMAT_USED_IN_DATABASE.format(optionalStartDate.getTime());
+            String formattedEndDate = DateUtilities.DATE_FORMAT_USED_IN_DATABASE.format(optionalEndDate.getTime());
+
+            cursor = queryResults(ResultsTable.Cols.DATE + " >= " + formattedStartDate +
+                    " AND " + ResultsTable.Cols.DATE + " <= " + formattedEndDate, null);
 
 
 
@@ -117,13 +121,13 @@ public class ResultsBank {
             cursor = queryResults(ResultsTable.Cols.DATE + " = " + DateUtilities.convertCalendarToIntUsedInDatabase(today)
                     , null);
         } else if(typeOfChosenPeriodOfTime == THIS_WEEK_EXAMS) {
-            Calendar firstDayOfCurrenWeek = (Calendar) today.clone();
+            Calendar firstDayOfCurrentWeek = (Calendar) today.clone();
 
-            while (!(firstDayOfCurrenWeek.get(Calendar.DAY_OF_WEEK) == firstDayOfCurrenWeek.getFirstDayOfWeek())) {
-                firstDayOfCurrenWeek.add(Calendar.DAY_OF_MONTH, -1);
+            while (!(firstDayOfCurrentWeek.get(Calendar.DAY_OF_WEEK) == firstDayOfCurrentWeek.getFirstDayOfWeek())) {
+                firstDayOfCurrentWeek.add(Calendar.DAY_OF_MONTH, -1);
             }
 
-            String formattedFirstDayOfCurrentWeek = DateUtilities.DATE_FORMAT_USED_IN_DATABASE.format(firstDayOfCurrenWeek.getTime());
+            String formattedFirstDayOfCurrentWeek = DateUtilities.DATE_FORMAT_USED_IN_DATABASE.format(firstDayOfCurrentWeek.getTime());
             String formattedToday = DateUtilities.DATE_FORMAT_USED_IN_DATABASE.format(today.getTime());
 
             cursor = queryResults(ResultsTable.Cols.DATE + " >= " + formattedFirstDayOfCurrentWeek +
