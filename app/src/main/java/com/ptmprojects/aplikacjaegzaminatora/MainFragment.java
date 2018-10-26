@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class MainFragment extends Fragment {
+public class MainFragment extends Fragment implements View.OnClickListener{
     private TextView rateOfPositiveResults;
     private TextView positive;
     private TextView didNotTakeAnExam;
@@ -54,16 +54,23 @@ public class MainFragment extends Fragment {
         negativeTrafficArea.setText(String.valueOf(negativeTrafficAreaResult));
         numberOfExams.setText(String.valueOf(numberOfAllExams));
 
-        addAnExamButton.setOnClickListener((view) -> {
-            Intent i = new Intent(getActivity(), AddNewDataActivity.class);
-            startActivity(i);
-        });
-
-        exploreResultsButton.setOnClickListener((view) -> {
-            Intent i = new Intent(getActivity(), ExamExplorerActivity.class);
-            startActivity(i);
-        });
+        addAnExamButton.setOnClickListener(this);
+        exploreResultsButton.setOnClickListener(this);
 
         return v;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()) {
+            case R.id.add_an_exam_button:
+                Intent intentAddNewData = new Intent(getActivity(), AddNewDataActivity.class);
+                startActivity(intentAddNewData);
+                break;
+            case R.id.explore_results:
+                Intent examExplorer = new Intent(getActivity(), ExamExplorerActivity.class);
+                startActivity(examExplorer);
+                break;
+        }
     }
 }

@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class ExamExplorerChooserFragment extends Fragment {
+public class ExamExplorerChooserFragment extends Fragment implements View.OnClickListener{
     private static final String DEFAULT_CHOOSE_DATE_RANGE_SPINNER_VALUE = "Dzisiaj";
     private Callbacks mCallbacks;
     private Spinner mChooseDateRangeSpinner;
@@ -28,6 +28,18 @@ public class ExamExplorerChooserFragment extends Fragment {
     private Calendar mStartDate;
     private Calendar mEndDate;
 
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()) {
+            case R.id.showExamsButton:
+                if(mTagFromSpinner > 0) {
+                    mCallbacks.onShowExamsButtonClicked(mTagFromSpinner, null, null);
+                } else {
+                    mCallbacks.onShowExamsButtonClicked(mTagFromSpinner, mStartDate, mEndDate);
+                }
+                break;
+        }
+    }
 
 
     //Interface needed for hosting Activities:
@@ -58,9 +70,12 @@ public class ExamExplorerChooserFragment extends Fragment {
         mStartDate = today;
         mStartDateButton = (Button) v.findViewById(R.id.start_date_button);
         mStartDateButton.setText(ResultsBank.sDateFormat.format(today.getTime()));
+        mStartDateButton.setVisibility(View.GONE);
+
         mEndDateButton = (Button) v.findViewById(R.id.end_date_button);
         mEndDate = today;
         mEndDateButton.setText(ResultsBank.sDateFormat.format(today.getTime()));
+        mStartDateButton.setVisibility(View.GONE);
 
         mChooseDateRangeSpinner = v.findViewById(R.id.date_range_chooser_spinner);
         List<StringWithCorrespondingTag> listOfSpinnerItems = new ArrayList<StringWithCorrespondingTag>();
@@ -83,6 +98,14 @@ public class ExamExplorerChooserFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 StringWithCorrespondingTag newlySelectedItem = (StringWithCorrespondingTag) parent.getItemAtPosition(position);
                 mTagFromSpinner = newlySelectedItem.getIdPart();
+
+                if(mTagFromSpinner == ResultsBank.USER_DEFINED_PERIOD_OF_TIME_EXAMS) {
+                    mStartDateButton.setVisibility(View.VISIBLE);
+                    mEndDateButton.setVisibility(View.VISIBLE);
+                } else {
+                    mStartDateButton.setVisibility(View.GONE);
+                    mEndDateButton.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -92,20 +115,7 @@ public class ExamExplorerChooserFragment extends Fragment {
         });
 
         mShowExamsButton = (Button) v.findViewById(R.id.showExamsButton);
-        mShowExamsButton.setOnClickListener((view) -> {
-            // Querying db here or in the Callbacks.onShowExamsbuttonClicked() ?
-
-            //
-            //
-
-            if(mTagFromSpinner > 0) {
-                mCallbacks.onShowExamsButtonClicked(mTagFromSpinner, null, null);
-            } else {
-                mCallbacks.onShowExamsButtonClicked(mTagFromSpinner, mStartDate, mEndDate);
-            }
-
-        });
-
+        mShowExamsButton.setOnClickListener(this);
         return v;
     }
 
