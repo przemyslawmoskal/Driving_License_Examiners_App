@@ -128,22 +128,28 @@ public class ResultsBank {
                     , null);
         } else if(typeOfChosenPeriodOfTime == THIS_WEEK_EXAMS) {
             // needs to be implemented yet
-            Calendar c2 = (Calendar) today.clone();
-            Calendar c3 = (Calendar) today.clone();
-            int year = today.get(Calendar.YEAR);
-            int month = today.get(Calendar.MONTH) - 1; // for Calendar instance, month - 1;
-            int day = today.get(Calendar.DAY_OF_MONTH);
-            c2.set(year, month - 1, day);
-            c2.set(Calendar.HOUR_OF_DAY, 0); // ! clear would not reset the hour of day !
-            c2.clear(Calendar.MINUTE);
-            c2.clear(Calendar.SECOND);
-            c2.clear(Calendar.MILLISECOND);
+            Calendar firstDayOfCurrenWeek = (Calendar) today.clone();
+//            Calendar c3 = (Calendar) today.clone();
+//            int year = today.get(Calendar.YEAR);
+//            int month = today.get(Calendar.MONTH) - 1; // for Calendar instance, month - 1;
+//            int day = today.get(Calendar.DAY_OF_MONTH);
+//            firstDayOfCurrenWeek.set(year, month - 1, day);
+//            firstDayOfCurrenWeek.set(Calendar.HOUR_OF_DAY, 0); // ! clear would not reset the hour of day !
+//            firstDayOfCurrenWeek.clear(Calendar.MINUTE);
+//            firstDayOfCurrenWeek.clear(Calendar.SECOND);
+//            firstDayOfCurrenWeek.clear(Calendar.MILLISECOND);
 
-            int daysDifference = 0;
-            while (!(c2.get(Calendar.DAY_OF_WEEK) == c2.getFirstDayOfWeek())) {
-                daysDifference++;
-                c2.add(Calendar.DAY_OF_MONTH, -1);
+            int daysDifferenceBetweenFirstDayOfWeekAndToday = 0;
+            while (!(firstDayOfCurrenWeek.get(Calendar.DAY_OF_WEEK) == firstDayOfCurrenWeek.getFirstDayOfWeek())) {
+                daysDifferenceBetweenFirstDayOfWeekAndToday++;
+                firstDayOfCurrenWeek.add(Calendar.DAY_OF_MONTH, -1);
             }
+
+            String formattedFirstDayOfCurrentWeek = DateUtilities.DATE_FORMAT_USED_IN_DATABASE.format(firstDayOfCurrenWeek.getTime());
+            String formattedToday = DateUtilities.DATE_FORMAT_USED_IN_DATABASE.format(today.getTime());
+
+            cursor = queryResults(ResultsTable.Cols.DATE + " >= " + formattedFirstDayOfCurrentWeek +
+                    " AND " + ResultsTable.Cols.DATE + " <= " + formattedToday, null);
 
         } else if(typeOfChosenPeriodOfTime == THIS_MONTH_EXAMS) {
             String thisYearAndMonthStartDate = DateUtilities.YEAR_MONTH_FORMAT.format((today.getTime())) + "01";//for 26.10.2018 it's 20180900
