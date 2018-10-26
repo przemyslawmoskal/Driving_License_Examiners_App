@@ -23,7 +23,8 @@ public class AddNewDataActivity extends AppCompatActivity implements View.OnClic
     private Button mChooseDateButton;
     private RadioGroup mRadioGroup;
     private Spinner mChooseCategorySpinner;
-    private int mYear, mMonth, mDayOfMonth, mChosenYear, mChosenMonth, mChosenDayOfMonth;
+    private int mYear, mMonth, mDayOfMonth, mChosenDateToDatabase;
+//    mChosenYear, mChosenMonth, mChosenDayOfMonth;
 
     public static final String TAG = "AddNewDataActivity";
 
@@ -68,9 +69,10 @@ public class AddNewDataActivity extends AppCompatActivity implements View.OnClic
                 RadioButton selectedRadioButton = (RadioButton) findViewById(selectedRadioButtonId);
 
                 ExamResult examResult = new ExamResult();
-                examResult.setYear(mChosenYear);
-                examResult.setMonth(mChosenMonth);
-                examResult.setDay(mChosenDayOfMonth);
+                examResult.setDate(mChosenDateToDatabase);
+//                examResult.setYear(mChosenYear);
+//                examResult.setMonth(mChosenMonth);
+//                examResult.setDay(mChosenDayOfMonth);
                 examResult.setResult(ResultsBank.convertStringResultToCorrespondingInt(selectedRadioButton.getText().toString()));
                 examResult.setCategory(categoryChosenFromSpinner.toString());
                 // Just a sample ordering, needs to be implemented yet:
@@ -110,15 +112,21 @@ public class AddNewDataActivity extends AppCompatActivity implements View.OnClic
                             int resultOfDatesComparison = chosenDate.compareTo(today);
                             if (resultOfDatesComparison > 0) {
                                 Toast.makeText(AddNewDataActivity.this, R.string.chosen_date_greater_than_today, Toast.LENGTH_SHORT).show();
-                                mChosenYear = 0;
-                                mChosenMonth = 0;
-                                mChosenDayOfMonth = 0;
+//                                mChosenYear = 0;
+//                                mChosenMonth = 0;
+//                                mChosenDayOfMonth = 0;
+                                mChosenDateToDatabase = 0;
                                 mChooseDateButton.setText(getString(R.string.choose_date));
                             } else {
-                                mChosenYear = year;
-                                mChosenMonth = monthOfYear + 1;
-                                mChosenDayOfMonth = dayOfMonth;
-                                mChooseDateButton.setText(mChosenDayOfMonth + "-" + (mChosenMonth) + "-" + mChosenYear);
+//                                mChosenYear = year;
+//                                mChosenMonth = monthOfYear + 1;
+//                                mChosenDayOfMonth = dayOfMonth;
+                                mChosenDateToDatabase = DateUtilities.convertCalendarToIntUsedInDatabase(chosenDate);
+//                                String mChosenDateToDatabaseAsString =
+//                                String mChosenDateAsString = "" + year + (monthOfYear + 1) + dayOfMonth;
+//                                mChosenDateToDatabase = Integer.valueOf(mChosenDateAsString);
+//                                mChooseDateButton.setText(mChosenDayOfMonth + "-" + (mChosenMonth) + "-" + mChosenYear);
+                                mChooseDateButton.setText(DateUtilities.DATE_FORMAT_USED_ON_THE_BUTTONS.format(chosenDate.getTime()));
                             }
                         }
                     }, mYear, mMonth, mDayOfMonth);

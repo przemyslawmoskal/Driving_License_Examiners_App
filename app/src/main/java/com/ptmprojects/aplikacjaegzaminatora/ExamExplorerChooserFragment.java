@@ -57,10 +57,10 @@ public class ExamExplorerChooserFragment extends Fragment {
         Calendar today = Calendar.getInstance();
         mStartDate = today;
         mStartDateButton = (Button) v.findViewById(R.id.start_date_button);
-        mStartDateButton.setText(ResultsBank.sdateFormat.format(today.getTime()));
+        mStartDateButton.setText(ResultsBank.sDateFormat.format(today.getTime()));
         mEndDateButton = (Button) v.findViewById(R.id.end_date_button);
         mEndDate = today;
-        mEndDateButton.setText(ResultsBank.sdateFormat.format(today.getTime()));
+        mEndDateButton.setText(ResultsBank.sDateFormat.format(today.getTime()));
 
         mChooseDateRangeSpinner = v.findViewById(R.id.date_range_chooser_spinner);
         List<StringWithCorrespondingTag> listOfSpinnerItems = new ArrayList<StringWithCorrespondingTag>();

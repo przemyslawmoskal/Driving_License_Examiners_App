@@ -30,7 +30,7 @@ public class ResultsBank {
     public static final int THIS_YEAR_EXAMS = 365;
     public static final int ALL_TIME_EXAMS = 1000;
 
-    public static final SimpleDateFormat sdateFormat= new SimpleDateFormat("dd-MM-yyyy");
+    public static final SimpleDateFormat sDateFormat = new SimpleDateFormat("dd' 'MMMM' 'yyyy");
     public static final String TAG = "ResultsBank.java";
 
     private static ResultsBank sResultsBank;
@@ -114,26 +114,54 @@ public class ResultsBank {
                 ", startDate: " + optionalStartDate +
                 ", endDate: " + optionalEndDate +
                 ", Calendar YEAR: " + today.get(Calendar.YEAR) +
-                ", Calendar MONTH: " + today.get(Calendar.MONTH) +
+                ", Calendar MONTH (+1): " + (DateUtilities.TWO_DIGIT_MONTH_FORMAT.format(today.get(Calendar.MONTH))) +
                 ", Calendar DAY: " + today.get(Calendar.DAY_OF_MONTH));
 
 
         if(typeOfChosenPeriodOfTime == USER_DEFINED_PERIOD_OF_TIME_EXAMS) {
             // needs to be implemented yet
         } else if(typeOfChosenPeriodOfTime == TODAY_EXAMS) {
-            cursor = queryResults(ResultsTable.Cols.YEAR + " = " + today.get(Calendar.YEAR) +
-                    " AND " + ResultsTable.Cols.MONTH + " = " + (today.get(Calendar.MONTH) + 1) +
-                    " AND " + ResultsTable.Cols.DAY + " = " + today.get(Calendar.DAY_OF_MONTH), null);
-
+//            cursor = queryResults(ResultsTable.Cols.YEAR + " = " + today.get(Calendar.YEAR) +
+//                    " AND " + ResultsTable.Cols.MONTH + " = " + (today.get(Calendar.MONTH) + 1) +
+//                    " AND " + ResultsTable.Cols.DAY + " = " + today.get(Calendar.DAY_OF_MONTH), null);
+            cursor = queryResults(ResultsTable.Cols.DATE + " = " + DateUtilities.convertCalendarToIntUsedInDatabase(today)
+                    , null);
         } else if(typeOfChosenPeriodOfTime == THIS_WEEK_EXAMS) {
             // needs to be implemented yet
+            Calendar c2 = (Calendar) today.clone();
+            Calendar c3 = (Calendar) today.clone();
+            int year = today.get(Calendar.YEAR);
+            int month = today.get(Calendar.MONTH) - 1; // for Calendar instance, month - 1;
+            int day = today.get(Calendar.DAY_OF_MONTH);
+            c2.set(year, month - 1, day);
+            c2.set(Calendar.HOUR_OF_DAY, 0); // ! clear would not reset the hour of day !
+            c2.clear(Calendar.MINUTE);
+            c2.clear(Calendar.SECOND);
+            c2.clear(Calendar.MILLISECOND);
+
+            int daysDifference = 0;
+            while (!(c2.get(Calendar.DAY_OF_WEEK) == c2.getFirstDayOfWeek())) {
+                daysDifference++;
+                c2.add(Calendar.DAY_OF_MONTH, -1);
+            }
 
         } else if(typeOfChosenPeriodOfTime == THIS_MONTH_EXAMS) {
-            cursor = queryResults(ResultsTable.Cols.YEAR + " = " + today.get(Calendar.YEAR) +
-                    " AND " + ResultsTable.Cols.MONTH + " = " + (today.get(Calendar.MONTH) + 1), null);
+            String thisYearAndMonthStartDate = DateUtilities.YEAR_MONTH_FORMAT.format((today.getTime())) + "01";//for 26.10.2018 it's 20180900
+            String thisYearAndMonthEndDate = DateUtilities.YEAR_MONTH_FORMAT.format((today.getTime())) + "31";//for 26.10.2018 it's 20180931
+
+            cursor = queryResults(ResultsTable.Cols.DATE + " >= " + thisYearAndMonthStartDate +
+                    " AND " + ResultsTable.Cols.DATE + " <= " + thisYearAndMonthEndDate, null);
 
         } else if(typeOfChosenPeriodOfTime == THIS_YEAR_EXAMS) {
-            cursor = queryResults(ResultsTable.Cols.YEAR + " = " + today.get(Calendar.YEAR), null);
+            String thisYearStartDate = DateUtilities.YEAR_FORMAT.format((today.getTime())) + "0001";//for 26.10.2018 it's 20180900
+            Calendar firstDayOfNextYearFromNow = (Calendar) today.clone();
+            firstDayOfNextYearFromNow.add(Calendar.YEAR, 1);
+            firstDayOfNextYearFromNow.set(Calendar.DAY_OF_YEAR, 1);
+            String formattedFirstDayOfNextYearFromNow = DateUtilities.DATE_FORMAT_USED_IN_DATABASE.format(firstDayOfNextYearFromNow.getTime());
+
+            cursor = queryResults(ResultsTable.Cols.DATE + " >= " + thisYearStartDate +
+                    " AND " + ResultsTable.Cols.DATE + " < " + formattedFirstDayOfNextYearFromNow, null);
+//            cursor = queryResults(ResultsTable.Cols.YEAR + " = " + today.get(Calendar.YEAR), null);
 
         } else if(typeOfChosenPeriodOfTime == ALL_TIME_EXAMS) {
             cursor = queryResults(null, null);
@@ -154,9 +182,7 @@ public class ResultsBank {
 
     private static ContentValues getContentValues(ExamResult result) {
         ContentValues values = new ContentValues();
-        values.put(ResultsTable.Cols.YEAR, result.getYear());
-        values.put(ResultsTable.Cols.MONTH, result.getMonth());
-        values.put(ResultsTable.Cols.DAY, result.getDay());
+        values.put(ResultsTable.Cols.DATE, result.getDate());
         values.put(ResultsTable.Cols.ORDER_NUMBER, result.getOrderNumber());
         values.put(ResultsTable.Cols.RESULT, result.getResult());
         values.put(ResultsTable.Cols.UUID, result.getId().toString());
