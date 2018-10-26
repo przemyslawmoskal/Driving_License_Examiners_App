@@ -24,12 +24,9 @@ public class ExamExplorerListFragment extends Fragment{
     private RecyclerView mExamListRecyclerView;
     private ExamAdapter mAdapter;
 
-
-    //
     private int mTypeOfChosenPeriodOfTime;
     private Calendar startDate;
     private Calendar endDate;
-    //
 
     public static ExamExplorerListFragment newInstance(Integer periodOfTime, Calendar optionalStartDate, Calendar optionalEndDate) {
         Bundle args = new Bundle();
@@ -68,8 +65,6 @@ public class ExamExplorerListFragment extends Fragment{
 
     private void updateUI(int typeOfChosenPeriodOfTime, Calendar optionalStartDate, Calendar optionalEndDate) {
         ResultsBank bank = ResultsBank.get(getActivity());
-        // it should not be "getResults" = it should just count how many results are needed, not all:
-//        List<ExamResult> results = bank.getResults();
         List<ExamResult> resultsForSpecifiedPeriodOfTime = bank.getResultsForSpecifiedPeriodOfTime(typeOfChosenPeriodOfTime, optionalStartDate, optionalEndDate);
 
         mAdapter = new ExamAdapter(resultsForSpecifiedPeriodOfTime);

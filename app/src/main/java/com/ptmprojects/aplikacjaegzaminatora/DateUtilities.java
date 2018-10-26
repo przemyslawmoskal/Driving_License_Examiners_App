@@ -45,6 +45,4 @@ public class DateUtilities {
 //        calendarSetToDateFromDatabase.set(yearPart, monthPartNeededInCalendar, dayOfMonthPart);
 //        return  calendarSetToDateFromDatabase;
 //    }
-//
-//    public static
 }

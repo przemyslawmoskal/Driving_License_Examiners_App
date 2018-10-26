@@ -18,7 +18,6 @@ import java.util.Calendar;
 import java.util.List;
 
 public class ExamExplorerChooserFragment extends Fragment implements View.OnClickListener{
-    private static final String DEFAULT_CHOOSE_DATE_RANGE_SPINNER_VALUE = "Dzisiaj";
     private Callbacks mCallbacks;
     private Spinner mChooseDateRangeSpinner;
     private Button mStartDateButton;
@@ -57,14 +56,6 @@ public class ExamExplorerChooserFragment extends Fragment implements View.OnClic
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_exam_explorer_chooser, container, false);
-
-//        mChooseDateRangeSpinner = v.findViewById(R.id.date_range_chooser_spinner);
-//        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
-//                R.array.time_scopes, android.R.layout.simple_spinner_item);
-//        int spinnerDefaultPosition = adapter.getPosition(DEFAULT_CHOOSE_DATE_RANGE_SPINNER_VALUE);
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        mChooseDateRangeSpinner.setAdapter(adapter);
-//        mChooseDateRangeSpinner.setSelection(spinnerDefaultPosition);
 
         Calendar today = Calendar.getInstance();
         mStartDate = today;

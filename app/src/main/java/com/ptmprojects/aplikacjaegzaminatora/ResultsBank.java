@@ -71,15 +71,6 @@ public class ResultsBank {
         }
     }
 
-    // to return int 20181015 from date 15-10-2018:
-//    public static int convertCalendarToInteger(Calendar calendar) {
-//        int year = calendar.get(Calendar.YEAR);
-//        int month = calendar.get(Calendar.MONTH) + 1; // January == 0, February == 1, etc...
-//        int day = calendar.get(Calendar.DAY_OF_MONTH);
-//        String wholeDateAsString = "" + year + month + day;
-//        return Integer.valueOf(wholeDateAsString);
-//    }
-
     public static ResultsBank get(Context context) {
         if (sResultsBank == null) {
             sResultsBank = new ResultsBank(context);
@@ -105,7 +96,6 @@ public class ResultsBank {
         return results;
     }
 
-
     public List<ExamResult> getResultsForSpecifiedPeriodOfTime(int typeOfChosenPeriodOfTime, Calendar optionalStartDate, Calendar optionalEndDate) {
         List<ExamResult> results = new ArrayList<>();
         ResultsCursorWrapper cursor = null;
@@ -120,28 +110,16 @@ public class ResultsBank {
 
         if(typeOfChosenPeriodOfTime == USER_DEFINED_PERIOD_OF_TIME_EXAMS) {
             // needs to be implemented yet
+
+
+
         } else if(typeOfChosenPeriodOfTime == TODAY_EXAMS) {
-//            cursor = queryResults(ResultsTable.Cols.YEAR + " = " + today.get(Calendar.YEAR) +
-//                    " AND " + ResultsTable.Cols.MONTH + " = " + (today.get(Calendar.MONTH) + 1) +
-//                    " AND " + ResultsTable.Cols.DAY + " = " + today.get(Calendar.DAY_OF_MONTH), null);
             cursor = queryResults(ResultsTable.Cols.DATE + " = " + DateUtilities.convertCalendarToIntUsedInDatabase(today)
                     , null);
         } else if(typeOfChosenPeriodOfTime == THIS_WEEK_EXAMS) {
-            // needs to be implemented yet
             Calendar firstDayOfCurrenWeek = (Calendar) today.clone();
-//            Calendar c3 = (Calendar) today.clone();
-//            int year = today.get(Calendar.YEAR);
-//            int month = today.get(Calendar.MONTH) - 1; // for Calendar instance, month - 1;
-//            int day = today.get(Calendar.DAY_OF_MONTH);
-//            firstDayOfCurrenWeek.set(year, month - 1, day);
-//            firstDayOfCurrenWeek.set(Calendar.HOUR_OF_DAY, 0); // ! clear would not reset the hour of day !
-//            firstDayOfCurrenWeek.clear(Calendar.MINUTE);
-//            firstDayOfCurrenWeek.clear(Calendar.SECOND);
-//            firstDayOfCurrenWeek.clear(Calendar.MILLISECOND);
 
-            int daysDifferenceBetweenFirstDayOfWeekAndToday = 0;
             while (!(firstDayOfCurrenWeek.get(Calendar.DAY_OF_WEEK) == firstDayOfCurrenWeek.getFirstDayOfWeek())) {
-                daysDifferenceBetweenFirstDayOfWeekAndToday++;
                 firstDayOfCurrenWeek.add(Calendar.DAY_OF_MONTH, -1);
             }
 
@@ -167,7 +145,6 @@ public class ResultsBank {
 
             cursor = queryResults(ResultsTable.Cols.DATE + " >= " + thisYearStartDate +
                     " AND " + ResultsTable.Cols.DATE + " < " + formattedFirstDayOfNextYearFromNow, null);
-//            cursor = queryResults(ResultsTable.Cols.YEAR + " = " + today.get(Calendar.YEAR), null);
 
         } else if(typeOfChosenPeriodOfTime == ALL_TIME_EXAMS) {
             cursor = queryResults(null, null);

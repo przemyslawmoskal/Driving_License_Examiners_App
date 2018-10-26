@@ -1,6 +1,5 @@
 package com.ptmprojects.aplikacjaegzaminatora;
 
-import android.content.Intent;
 import android.support.v4.app.Fragment;
 
 import java.util.Calendar;
