@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -27,6 +28,7 @@ public class AddNewDataFragment extends Fragment implements View.OnClickListener
     private RadioGroup mRadioGroup;
     private RadioButton mChosenRadioButton;
     private Spinner mChooseCategorySpinner;
+    private String mCategorySelectedFromSpinner;
     private int mYear, mMonth, mDayOfMonth, mChosenDateToDatabase;
     private ResultsBank resultsBank;
     public static final String TAG = "AddNewDataFragment";
@@ -48,7 +50,23 @@ public class AddNewDataFragment extends Fragment implements View.OnClickListener
         int spinnerDefaultPosition = adapter.getPosition(DEFAULT_CHOOSE_CATEGORY_SPINNER_VALUE);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mChooseCategorySpinner.setAdapter(adapter);
+        mChooseCategorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mCategorySelectedFromSpinner = parent.getSelectedItem().toString();
+                Log.d(TAG, "Selected value: "  + parent.getSelectedItem().toString());
+                Log.d(TAG, "mCategorySelectedFromSpinner: " + mCategorySelectedFromSpinner.toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                mCategorySelectedFromSpinner = "XYZ";
+            }
+        });
         mChooseCategorySpinner.setSelection(spinnerDefaultPosition);
+        Log.d(TAG, "Spinner value: " + mChooseCategorySpinner.getSelectedItem().toString());
+        mCategorySelectedFromSpinner = mChooseCategorySpinner.getSelectedItem().toString();
+        Log.d(TAG, "mCategorySelectedFromSpinner: " + mCategorySelectedFromSpinner.toString());
 
         mChooseDateButton = v.findViewById(R.id.choose_date_button);
         mChooseDateButton.setOnClickListener(this);
@@ -93,7 +111,7 @@ public class AddNewDataFragment extends Fragment implements View.OnClickListener
                 int selectedRadioButtonId = mRadioGroup.getCheckedRadioButtonId();
                 Log.d(TAG, "selectedRadioButtonId: " + selectedRadioButtonId);
                 CharSequence textFromChooseDateButton = mChooseDateButton.getText();
-                CharSequence categoryChosenFromSpinner = mChooseCategorySpinner.getSelectedItem().toString();
+                CharSequence categoryChosenFromSpinner = mCategorySelectedFromSpinner;
                 if (mChosenRadioButton == null && textFromChooseDateButton.equals(getString(R.string.choose_date))) {
                     Toast.makeText(getActivity(), R.string.date_and_result_not_chosen, Toast.LENGTH_SHORT).show();
                 } else if (mChosenRadioButton == null) {
@@ -104,6 +122,7 @@ public class AddNewDataFragment extends Fragment implements View.OnClickListener
                     ExamResult examResult = new ExamResult();
                     examResult.setDate(mChosenDateToDatabase);
                     examResult.setResult(ResultsBank.convertStringResultToCorrespondingInt(mChosenRadioButton.getText().toString()));
+                    Log.d(TAG, "OK clicked: categoryChosenFromSpinner: " + categoryChosenFromSpinner + ", mCategorySelectedFromSpinner: " + mCategorySelectedFromSpinner);
                     examResult.setCategory(categoryChosenFromSpinner.toString());
 
                     // Just a sample ordering, needs to be implemented yet:

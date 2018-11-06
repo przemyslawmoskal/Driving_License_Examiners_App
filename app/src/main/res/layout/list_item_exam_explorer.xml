@@ -18,6 +18,7 @@
 
     <Button
         android:id="@+id/list_item_category_button"
+        android:minWidth="0dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -27,6 +28,7 @@
 
     <Button
         android:id="@+id/list_item_result_button"
+        android:minWidth="0dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"

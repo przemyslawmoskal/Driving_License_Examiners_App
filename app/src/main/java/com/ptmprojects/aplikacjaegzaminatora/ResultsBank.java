@@ -56,6 +56,14 @@ public class ResultsBank {
 //        }
     }
 
+    public static void loadDatabaseFromFile() {
+
+    }
+
+    public static void saveDatabaseToFile() {
+
+    }
+
     public static int convertStringResultToCorrespondingInt(String resultString) {
         switch (resultString) {
             case "P":
@@ -66,6 +74,21 @@ public class ResultsBank {
                 return ResultsBank.NEGATIVE_MANEUVRING_AREA_RESULT;
             case "n":
                 return ResultsBank.NEGATIVE_TRAFFIC_AREA_RESULT;
+            default:
+                throw new IllegalArgumentException("Invalid exam result!");
+        }
+    }
+
+    public static String convertIntResultToCorrespondingString(int resultInt) {
+        switch (resultInt) {
+            case ResultsBank.POSITIVE_RESULT:
+                return "P";
+            case ResultsBank.DID_NOT_TAKE_EXAM_RESULT:
+                return "X";
+            case ResultsBank.NEGATIVE_MANEUVRING_AREA_RESULT:
+                return "N";
+            case ResultsBank.NEGATIVE_TRAFFIC_AREA_RESULT:
+                return "n";
             default:
                 throw new IllegalArgumentException("Invalid exam result!");
         }
@@ -171,6 +194,7 @@ public class ResultsBank {
         ContentValues values = new ContentValues();
         values.put(ResultsTable.Cols.DATE, result.getDate());
         values.put(ResultsTable.Cols.ORDER_NUMBER, result.getOrderNumber());
+        values.put(ResultsTable.Cols.CATEGORY, result.getCategory());
         values.put(ResultsTable.Cols.RESULT, result.getResult());
         values.put(ResultsTable.Cols.UUID, result.getId().toString());
         return values;
@@ -212,7 +236,7 @@ public class ResultsBank {
                 whereArgs,
                 null,
                 null,
-                null
+                ResultsTable.Cols.DATE + ", " + ResultsTable.Cols.ORDER_NUMBER
         );
 
         return new ResultsCursorWrapper(cursor);

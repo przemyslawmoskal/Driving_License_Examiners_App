@@ -19,9 +19,6 @@ public class ResultsBaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table " + ResultsTable.NAME + "(" +
                 "_id integer primary key autoincrement, " +
-//                ResultsTable.Cols.YEAR + " INTEGER, " +
-//                ResultsTable.Cols.MONTH + " INTEGER, " +
-//                ResultsTable.Cols.DAY + " INTEGER, " +
                 ResultsTable.Cols.DATE + " INTEGER, " +
                 ResultsTable.Cols.ORDER_NUMBER + " INTEGER, " +
                 ResultsTable.Cols.CATEGORY + " TEXT, " +

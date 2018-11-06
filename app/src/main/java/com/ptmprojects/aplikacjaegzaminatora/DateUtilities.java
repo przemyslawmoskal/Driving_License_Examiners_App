@@ -7,6 +7,7 @@ import java.util.Calendar;
 public class DateUtilities {
     public static final SimpleDateFormat DATE_FORMAT_USED_IN_DATABASE = new SimpleDateFormat("yyyyMMdd");
     public static final SimpleDateFormat DATE_FORMAT_USED_ON_THE_BUTTONS = new SimpleDateFormat("dd' 'MMMM' 'yyyy");
+    public static final SimpleDateFormat DATE_FORMAT_USED_ON_THE_BUTTONS_SHORT = new SimpleDateFormat("dd' 'MMM' '''yy");
     public static final SimpleDateFormat YEAR_FORMAT = new SimpleDateFormat("yyyy");
     public static final SimpleDateFormat TWO_DIGIT_MONTH_FORMAT = new SimpleDateFormat("MM");
     public static final SimpleDateFormat YEAR_MONTH_FORMAT = new SimpleDateFormat("yyyyMM");

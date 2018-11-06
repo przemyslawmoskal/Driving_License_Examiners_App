@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.Calendar;
 import java.util.List;
@@ -70,9 +72,26 @@ public class ExamExplorerListFragment extends Fragment{
     }
 
     private class ExamHolder extends RecyclerView.ViewHolder {
+        private Button mDateButton;
+        private Button mCategoryButton;
+        private Button mResultButton;
+        private Button mDeleteButton;
+        private ExamResult mExamResult;
 
         public ExamHolder (LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_exam_explorer, parent, false));
+            mDateButton = (Button) itemView.findViewById(R.id.list_item_date_button);
+            mCategoryButton = (Button) itemView.findViewById(R.id.list_item_category_button);
+            mResultButton = (Button) itemView.findViewById(R.id.list_item_result_button);
+            mDeleteButton = (Button) itemView.findViewById(R.id.list_item_delete_button);
+        }
+
+        public void bind(ExamResult examResult) {
+            mExamResult = examResult;
+            mDateButton.setText(DateUtilities.DATE_FORMAT_USED_ON_THE_BUTTONS_SHORT.format(DateUtilities.convertIntUsedInDatabaseToCalendar(mExamResult.getDate()).getTime()));
+            mCategoryButton.setText(mExamResult.getCategory().toString());
+            mResultButton.setText(ResultsBank.convertIntResultToCorrespondingString(mExamResult.getResult()));
+            mDeleteButton.setText(getString(R.string.delete));
         }
     }
 
@@ -91,7 +110,8 @@ public class ExamExplorerListFragment extends Fragment{
 
         @Override
         public void onBindViewHolder(ExamHolder holder, int position) {
-
+            ExamResult examResult = mExamResults.get(position);
+            holder.bind(examResult);
         }
 
         @Override
