@@ -16,8 +16,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/list_item_category_button"
+    <Spinner
+        android:id="@+id/list_item_category_spinner"
         android:minWidth="0dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -26,15 +26,15 @@
         app:layout_constraintBaseline_toBaselineOf="@+id/list_item_date_button"
         app:layout_constraintStart_toEndOf="@+id/list_item_date_button" />
 
-    <Button
-        android:id="@+id/list_item_result_button"
+    <Spinner
+        android:id="@+id/list_item_result_spinner"
         android:minWidth="0dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="@string/result"
         app:layout_constraintBaseline_toBaselineOf="@+id/list_item_date_button"
-        app:layout_constraintStart_toEndOf="@+id/list_item_category_button" />
+        app:layout_constraintStart_toEndOf="@+id/list_item_category_spinner" />
 
     <Button
         android:id="@+id/list_item_delete_button"
@@ -43,6 +43,6 @@
         android:layout_marginStart="8dp"
         android:text="@string/delete"
         app:layout_constraintBaseline_toBaselineOf="@+id/list_item_date_button"
-        app:layout_constraintStart_toEndOf="@+id/list_item_result_button" />
+        app:layout_constraintStart_toEndOf="@+id/list_item_result_spinner" />
 
 </android.support.constraint.ConstraintLayout>

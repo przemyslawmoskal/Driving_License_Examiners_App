@@ -9,14 +9,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.List;
-
-import database.ResultsDbSchema;
 
 public class ExamExplorerListFragment extends Fragment{
     public static final String ARG_TYPE_OF_CHOSEN_PERIOD_OF_TIME = "ArgTypeOfChosenPeriodOfTime";
@@ -76,8 +76,8 @@ public class ExamExplorerListFragment extends Fragment{
 
     private class ExamHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private Button mDateButton;
-        private Button mCategoryButton;
-        private Button mResultButton;
+        private Spinner mCategorySpinner;
+        private Spinner mResultSpinner;
         private Button mDeleteButton;
         private ExamResult mExamResult;
 
@@ -85,16 +85,61 @@ public class ExamExplorerListFragment extends Fragment{
             super(inflater.inflate(R.layout.list_item_exam_explorer, parent, false));
             itemView.setOnClickListener(this);
             mDateButton = (Button) itemView.findViewById(R.id.list_item_date_button);
-            mCategoryButton = (Button) itemView.findViewById(R.id.list_item_category_button);
-            mResultButton = (Button) itemView.findViewById(R.id.list_item_result_button);
+            mCategorySpinner = (Spinner) itemView.findViewById(R.id.list_item_category_spinner);
+            mResultSpinner = (Spinner) itemView.findViewById(R.id.list_item_result_spinner);
             mDeleteButton = (Button) itemView.findViewById(R.id.list_item_delete_button);
         }
 
         public void bind(ExamResult examResult) {
             mExamResult = examResult;
             mDateButton.setText(DateUtilities.DATE_FORMAT_USED_ON_THE_BUTTONS_SHORT.format(DateUtilities.convertIntUsedInDatabaseToCalendar(mExamResult.getDate()).getTime()));
-            mCategoryButton.setText(mExamResult.getCategory().toString());
-            mResultButton.setText(ResultsBank.convertIntResultToCorrespondingString(mExamResult.getResult()));
+
+
+            //
+            ArrayAdapter<CharSequence> adapterCategories = ArrayAdapter.createFromResource(getActivity(),
+                    R.array.categories, android.R.layout.simple_spinner_item);
+            int categoriesSpinnerDefaultPosition = adapterCategories.getPosition(mExamResult.getCategory());
+            adapterCategories.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            mCategorySpinner.setAdapter(adapterCategories);
+            mCategorySpinner.setSelection(categoriesSpinnerDefaultPosition);
+            mCategorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    String newCategory = parent.getSelectedItem().toString();
+                    examResult.setCategory(newCategory);
+                    ResultsBank.get(getActivity()).updateResult(examResult);
+                    Toast.makeText(getActivity(), "Wybrano nową kategorię: " + parent.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
+            });
+
+            ArrayAdapter<CharSequence> adapterResults = ArrayAdapter.createFromResource(getActivity(),
+                    R.array.results, android.R.layout.simple_spinner_item);
+            int resultsSpinnerDefaultPosition = adapterResults.getPosition(ResultsBank.convertIntResultToCorrespondingString(mExamResult.getResult()));
+            adapterResults.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            mResultSpinner.setAdapter(adapterResults);
+            mResultSpinner.setSelection(resultsSpinnerDefaultPosition);
+            mResultSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    String newResult = parent.getSelectedItem().toString();
+                    examResult.setResult(ResultsBank.convertStringResultToCorrespondingInt(newResult));
+                    ResultsBank.get(getActivity()).updateResult(examResult);
+                    Toast.makeText(getActivity(), "Wybrano nowy wynik: " + parent.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
+            });
+
+
+
+
+//            mResultSpinner.setText(ResultsBank.convertIntResultToCorrespondingString(mExamResult.getResult()));
             mDeleteButton.setText(getString(R.string.delete));
             mDeleteButton.setOnClickListener(v -> {
                 ResultsBank.get(getActivity()).deleteResult(examResult);

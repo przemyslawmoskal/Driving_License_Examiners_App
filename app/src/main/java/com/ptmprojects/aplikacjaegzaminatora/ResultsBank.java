@@ -227,7 +227,7 @@ public class ResultsBank {
 
         mDatabase.update(ResultsTable.NAME, values, ResultsTable.Cols.UUID + "= ?", new String[]{uuidString});
     }
-// ??
+
     public void deleteResult(ExamResult result) {
         String uuidString = result.getId().toString();
         mDatabase.delete(ResultsTable.NAME, ResultsTable.Cols.UUID + "= ?", new String[]{uuidString});

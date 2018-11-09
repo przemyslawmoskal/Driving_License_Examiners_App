@@ -63,6 +63,12 @@
         <item>D1+E</item>
         <item>T</item>
     </string-array>
+    <string-array name="results">
+        <item>n</item>
+        <item>N</item>
+        <item>X</item>
+        <item>P</item>
+    </string-array>
     <string name="settings">Ustawienia</string>
     <string name="load_results_from_file">Wczytaj plik z historią egzaminów</string>
     <string name="search_for_file">Wyszukaj plik</string>
