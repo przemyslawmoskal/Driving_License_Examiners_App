@@ -69,4 +69,5 @@
     <string name="save_results_to_file">Zapisz wyniki do pliku</string>
     <string name="set_directory">Podaj ścieżkę pliku</string>
     <string name="confirm_save_button">Zapisz plik</string>
+    <string name="result_deleted">Wynik egzaminu został usunięty</string>
 </resources>

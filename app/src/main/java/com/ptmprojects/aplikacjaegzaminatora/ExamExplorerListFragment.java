@@ -11,9 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.List;
+
+import database.ResultsDbSchema;
 
 public class ExamExplorerListFragment extends Fragment{
     public static final String ARG_TYPE_OF_CHOSEN_PERIOD_OF_TIME = "ArgTypeOfChosenPeriodOfTime";
@@ -71,7 +74,7 @@ public class ExamExplorerListFragment extends Fragment{
         mExamListRecyclerView.setAdapter(mAdapter);
     }
 
-    private class ExamHolder extends RecyclerView.ViewHolder {
+    private class ExamHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private Button mDateButton;
         private Button mCategoryButton;
         private Button mResultButton;
@@ -80,6 +83,7 @@ public class ExamExplorerListFragment extends Fragment{
 
         public ExamHolder (LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_exam_explorer, parent, false));
+            itemView.setOnClickListener(this);
             mDateButton = (Button) itemView.findViewById(R.id.list_item_date_button);
             mCategoryButton = (Button) itemView.findViewById(R.id.list_item_category_button);
             mResultButton = (Button) itemView.findViewById(R.id.list_item_result_button);
@@ -92,6 +96,16 @@ public class ExamExplorerListFragment extends Fragment{
             mCategoryButton.setText(mExamResult.getCategory().toString());
             mResultButton.setText(ResultsBank.convertIntResultToCorrespondingString(mExamResult.getResult()));
             mDeleteButton.setText(getString(R.string.delete));
+            mDeleteButton.setOnClickListener(v -> {
+                ResultsBank.get(getActivity()).deleteResult(examResult);
+                Toast.makeText(getActivity(), getString(R.string.result_deleted), Toast.LENGTH_SHORT).show();
+                updateUI(mTypeOfChosenPeriodOfTime, startDate, endDate);
+            });
+        }
+
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(getActivity(), mExamResult.getDate() + " " + mExamResult.getResult() + " " +mExamResult.getCategory() + " klik!", Toast.LENGTH_SHORT).show();
         }
     }
 
