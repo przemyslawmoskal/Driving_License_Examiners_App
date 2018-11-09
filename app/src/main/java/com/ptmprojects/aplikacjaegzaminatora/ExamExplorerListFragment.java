@@ -1,5 +1,6 @@
 package com.ptmprojects.aplikacjaegzaminatora;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,6 +19,8 @@ import android.widget.Toast;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.xml.transform.Result;
+
 public class ExamExplorerListFragment extends Fragment{
     public static final String ARG_TYPE_OF_CHOSEN_PERIOD_OF_TIME = "ArgTypeOfChosenPeriodOfTime";
     public static final String ARG_CHOSEN_START_DATE = "ArgStartDateChosenByUser";
@@ -33,6 +36,8 @@ public class ExamExplorerListFragment extends Fragment{
     private Calendar startDate;
     private Calendar endDate;
 
+    private ResultsBank mResultsBank;
+
     public static ExamExplorerListFragment newInstance(Integer periodOfTime, Calendar optionalStartDate, Calendar optionalEndDate) {
         Bundle args = new Bundle();
         args.putInt(ARG_TYPE_OF_CHOSEN_PERIOD_OF_TIME, periodOfTime);
@@ -47,7 +52,9 @@ public class ExamExplorerListFragment extends Fragment{
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+        mResultsBank = ResultsBank.get(getActivity());
         mTypeOfChosenPeriodOfTime = getArguments().getInt(ARG_TYPE_OF_CHOSEN_PERIOD_OF_TIME);
         if (mTypeOfChosenPeriodOfTime == 0) {
             startDate =(Calendar) getArguments().getSerializable(ARG_CHOSEN_START_DATE);
@@ -67,8 +74,7 @@ public class ExamExplorerListFragment extends Fragment{
     }
 
     private void updateUI(int typeOfChosenPeriodOfTime, Calendar optionalStartDate, Calendar optionalEndDate) {
-        ResultsBank bank = ResultsBank.get(getActivity());
-        List<ExamResult> resultsForSpecifiedPeriodOfTime = bank.getResultsForSpecifiedPeriodOfTime(typeOfChosenPeriodOfTime, optionalStartDate, optionalEndDate);
+        List<ExamResult> resultsForSpecifiedPeriodOfTime = mResultsBank.getResultsForSpecifiedPeriodOfTime(typeOfChosenPeriodOfTime, optionalStartDate, optionalEndDate);
 
         mAdapter = new ExamAdapter(resultsForSpecifiedPeriodOfTime);
         mExamListRecyclerView.setAdapter(mAdapter);
@@ -93,9 +99,34 @@ public class ExamExplorerListFragment extends Fragment{
         public void bind(ExamResult examResult) {
             mExamResult = examResult;
             mDateButton.setText(DateUtilities.DATE_FORMAT_USED_ON_THE_BUTTONS_SHORT.format(DateUtilities.convertIntUsedInDatabaseToCalendar(mExamResult.getDate()).getTime()));
+//
+            mDateButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Calendar c = DateUtilities.convertIntUsedInDatabaseToCalendar((mExamResult.getDate()));
+
+                    int mYear = c.get(Calendar.YEAR);
+                    int mMonth = c.get(Calendar.MONTH);
+                    int mDayOfMonth = c.get(Calendar.DAY_OF_MONTH);
 
 
+                    DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(),
+                            (view, year, monthOfYear, dayOfMonth) -> {
+                                Calendar chosenDate = Calendar.getInstance();
+                                chosenDate.set(year, monthOfYear, dayOfMonth);
+
+                                int mChosenDateToDatabase = DateUtilities.convertCalendarToIntUsedInDatabase(chosenDate);
+                                mExamResult.setDate(mChosenDateToDatabase);
+                                mResultsBank.updateResult(examResult);
+                                mDateButton.setText(DateUtilities.DATE_FORMAT_USED_ON_THE_BUTTONS.format(chosenDate.getTime()));
+                                updateUI(mTypeOfChosenPeriodOfTime, startDate, endDate);
+                            }, mYear, mMonth, mDayOfMonth);
+                    datePickerDialog.show();
+                }
+            });
             //
+
             ArrayAdapter<CharSequence> adapterCategories = ArrayAdapter.createFromResource(getActivity(),
                     R.array.categories, android.R.layout.simple_spinner_item);
             int categoriesSpinnerDefaultPosition = adapterCategories.getPosition(mExamResult.getCategory());
@@ -107,8 +138,8 @@ public class ExamExplorerListFragment extends Fragment{
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     String newCategory = parent.getSelectedItem().toString();
                     examResult.setCategory(newCategory);
-                    ResultsBank.get(getActivity()).updateResult(examResult);
-                    Toast.makeText(getActivity(), "Wybrano nową kategorię: " + parent.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
+                    mResultsBank.updateResult(examResult);
+//                    Toast.makeText(getActivity(), "Wybrano nową kategorię: " + parent.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
@@ -127,8 +158,8 @@ public class ExamExplorerListFragment extends Fragment{
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     String newResult = parent.getSelectedItem().toString();
                     examResult.setResult(ResultsBank.convertStringResultToCorrespondingInt(newResult));
-                    ResultsBank.get(getActivity()).updateResult(examResult);
-                    Toast.makeText(getActivity(), "Wybrano nowy wynik: " + parent.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
+                    mResultsBank.updateResult(examResult);
+//                    Toast.makeText(getActivity(), "Wybrano nowy wynik: " + parent.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
@@ -136,13 +167,9 @@ public class ExamExplorerListFragment extends Fragment{
                 }
             });
 
-
-
-
-//            mResultSpinner.setText(ResultsBank.convertIntResultToCorrespondingString(mExamResult.getResult()));
             mDeleteButton.setText(getString(R.string.delete));
             mDeleteButton.setOnClickListener(v -> {
-                ResultsBank.get(getActivity()).deleteResult(examResult);
+                mResultsBank.deleteResult(examResult);
                 Toast.makeText(getActivity(), getString(R.string.result_deleted), Toast.LENGTH_SHORT).show();
                 updateUI(mTypeOfChosenPeriodOfTime, startDate, endDate);
             });
